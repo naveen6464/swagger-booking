@@ -1,0 +1,215 @@
+contorl
+   const user= await userService.getUsers(req);
+    console.log(user,11111111)
+      res.send(user);
+
+
+
+      userService
+       const apiFeature= new ApiFeature(User.find(),req.query).paginate(2)
+      const users = await apiFeature.query
+    
+    console.log(users,"page")
+    return users;
+
+//
+    const getUsers=catchAsync( async (req, res) => {
+    const filter = pick(req.query,["firtsName", "email"]);
+    const options = pick(req.query, ["limit","page"]);
+    const query=req.query
+    console.log(filter,options,query)
+    const user= await userService.getUsers(filter,options);
+
+    
+    console.log(user,11111111)
+      res.send(user);
+  })
+
+
+//get usersw
+const getUsers=async(filterdata,options,query)=>{
+  const resPerPage = 3;
+  const currentPage =Number(options.page) || 1;
+  const skip= resPerPage *(currentPage-1)  
+  console.log(currentPage,skip) 
+  const filter=filterdata
+  console.log(filter,999999999,query,options)
+  console.log(filter,"filter")
+  try {
+    const users= await User.find(filter).limit(resPerPage).skip(skip)
+   
+    console.log(users,"page")
+    return users;
+  } catch (e) {
+   console.log(e)
+  }
+ 
+}
+
+
+
+// /**
+ * @swagger
+ * tags:
+ *    name: User
+ *    description: User
+ */
+
+/**
+ * @swagger
+ *path:
+ * /users:
+ *    get:
+ *     summary: get all user data
+ *     description: admin only accesss the all data
+ *     tags: [User]
+ *     security:
+ *        - bearerAuth: []
+ * responses:
+ *     "200":
+ *         description: OK
+ *         content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  results:
+ *                    type: array
+ *         "401":         
+ *            $ref: '#/components/responses/Unauthorized'
+ *         "403":
+ *          $ref: '#/components/responses/Forbidden'
+ *   
+ */
+  
+ /**
+ * @swagger
+ * path:
+ * /register:
+ *    post:
+ *      summary: Register as user
+ *      tags: [User]
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              required:
+ *                - name
+ *                - email
+ *                - password
+ *              properties:
+ *                name:
+ *                  type: string
+ *                email:
+ *                  type: string
+ *                  format: email
+ *                  description: must be unique
+ *                password:
+ *                  type: string
+ *                  format: password
+ *                  minLength: 8
+ *                  description: At least one number and one letter
+ *              example:
+ *                firstName: navin
+ *                lastName:  kumar
+ *                email: navin@example.com
+ *                password: password1
+ *              
+ *      responses:
+ *        "201":
+ *          description: Created
+ *          content:
+ *            application/json:
+ *              
+ */
+
+ 
+ /**
+ * @swagger
+ * /user/{id}:
+ *   get:
+ *     summary: Get a single user by ID
+ *     tags: [User]
+ *     description: Retrieves a single user by their ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the user to retrieve.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       403:
+ *         $ref: '#/components/responses/Forbidden'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ * 
+ *   put:
+ *     summary: Update a user
+ *     tags: [User]
+ *     description: Updates a user with the specified ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the user to update.
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       403:
+ *         $ref: '#/components/responses/Forbidden'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ * 
+ *   delete:
+ *     summary: Delete a user
+ *     tags: [User]
+ *     description: Deletes a user with the specified ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The ID of the user to delete.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: No Content
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       403:
+ *         $ref: '#/components/responses/Forbidden'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ * 
+ */
